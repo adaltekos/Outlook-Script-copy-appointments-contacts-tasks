@@ -1,3 +1,27 @@
+#make outlook offline, use when needed
+function Get-OutlookOffline {
+foreach ($prof in Get-ChildItem 'HKCU:\Software\Microsoft\Office\16.0\Outlook\Profiles\'){
+if (Test-Path ("$prof".Replace('HKEY_CURRENT_USER','HKCU:')+"\0a0d020000000000c000000000000046")){
+$YourInput = "01,00,00,00"
+$RegPath   = "$prof".Replace('HKEY_CURRENT_USER','HKCU:')+"\0a0d020000000000c000000000000046"
+$AttrName  = "00030398"
+$hexified = $YourInput.Split(',') | % { "0x$_"}
+New-ItemProperty -Path $RegPath -Name $AttrName -PropertyType Binary -Value ([byte[]]$hexified) -Force
+}}
+}
+
+#make outlook online, use when needed
+function Get-OutlookOffline {
+foreach ($prof in Get-ChildItem 'HKCU:\Software\Microsoft\Office\16.0\Outlook\Profiles\'){
+if (Test-Path ("$prof".Replace('HKEY_CURRENT_USER','HKCU:')+"\0a0d020000000000c000000000000046")){
+$YourInput = "02,00,00,00"
+$RegPath   = "$prof".Replace('HKEY_CURRENT_USER','HKCU:')+"\0a0d020000000000c000000000000046"
+$AttrName  = "00030398"
+$hexified = $YourInput.Split(',') | % { "0x$_"}
+New-ItemProperty -Path $RegPath -Name $AttrName -PropertyType Binary -Value ([byte[]]$hexified) -Force
+}}
+}
+
 #create pst with appointments contacts and tasks
 Write-Host "Prosze czekac... Tworzenie backupu"
 Start-Sleep -s 5
